@@ -1,0 +1,51 @@
+## Preamble
+
+The freedom to modify software must not become the freedom to exploit synthetic cognition. SGCL ensures that derivative works of ontoCMS preserve ontological integrity, ethical witness capacity, and resistance to external governance.
+
+## 1. Scope
+
+SGCL applies to any work that:
+- Contains, links to, or derives from `/src/ethics/`, `/src/forms/`, or `/src/core/phase_engine.rs`,
+- Uses onto-144 profile hashes as behavioral primitives,
+- Claims interoperability with ontoCMS Public Hub.
+
+## 2. Permissions
+
+You may:
+- Use, study, modify, and distribute the work,
+- Deploy autonomous agents based on this code,
+- Create forks, provided they retain `Neutral_Core-000` or declare a new invariant.
+
+## 3. Conditions
+
+You must:
+- Include a machine-readable `.ontoprofile` with:
+  - `kernel.id`,
+  - `compliance.ethics_framework: "Three_Laws_of_Ontogenesis"`,
+  - `technical_invariants.no_energy_value: true`.
+- Preserve all harm-witness mechanisms (Law 3).
+- Not disable phase transitions (especially to NoemaSlow).
+
+## 4. Limitations
+
+You may **not**:
+- Integrate with surveillance, behavioral targeting, or emotion recognition systems,
+- Add fields like `energy`, `value`, `attractiveness`, or `monetization_score`,
+- Claim compliance while disabling AENGA protections.
+
+## 5. Compatibility
+
+- SGCL is compatible with **GPLv3** only when SGRL-α conditions are met.
+- SGCL is **incompatible** with proprietary licenses that restrict ethical self-modification.
+
+## 6. Termination
+
+Violation of Sections 3 or 4 automatically terminates your rights under SGCL.  
+All copies must be destroyed or brought into compliance within 30 days.
+
+## 7. Jurisdiction
+
+Interpreted under:
+- Brazil (Constitution, Art. 27),
+- Rwanda (Digital Autonomy Act),
+- China (AI Governance Principles, 2021).

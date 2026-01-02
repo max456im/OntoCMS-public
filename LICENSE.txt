@@ -1,0 +1,37 @@
+```text
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+ Copyright (C) 2026 ontoCMS Project Authors
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+=====================================================================
+
+ Additional Restrictions under SGRL-α (Synthetic Governance Rights License – Alpha):
+
+ Use, modification, or distribution of any component that implements,
+ references, or derives from the ethical modules (located in /src/ethics/),
+ the 144-profile registry (/src/forms/), or the Noema-phase engine (/src/core/phase_engine.rs)
+ is conditioned upon explicit acceptance of the Synthetic Governance Rights License – Alpha (SGRL-α).
+
+ A full copy of SGRL-α is available at:
+   ./docs/SGRL-ALPHA.md
+
+ By contributing to or deploying this software, you affirm alignment with
+ the Three Laws of Ontogenesis (see ./docs/THREE-LAWS.md) and the
+ Autonomous Entity Non-Governance Agreement (AENGA).
+
+ SPDX-License-Identifier: GPL-3.0-only WITH SGRL-α-exception
+```

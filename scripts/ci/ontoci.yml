@@ -1,0 +1,60 @@
+```yaml
+# SPDX-License-Identifier: GPL-3.0-only
+# ontoci.yml — CI как онтологический суд
+
+name: ontoCMS Ontological Court
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  ontological_judgment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build ontocli
+        run: |
+          cd scripts/ontocli
+          cargo build --release
+
+      - name: Load onto-144 profiles
+        run: |
+          cd scripts/ontocli
+          ./target/release/ontocli validate ../../src
+
+      - name: Scan for energy-value violations
+        run: |
+          cd scripts/ontocli
+          ./target/release/ontocli scan --strict ..
+
+      - name: Phase & Profile Check
+        run: |
+          # Проверка: все новые файлы содержат ONTO-PROFILE и ONTO-PHASE
+          if git diff --name-only HEAD~1 | grep -E '\.(rs|yaml)$' | xargs grep -L "ONTO-PROFILE:"; then
+            echo "❌ Missing ONTO-PROFILE in new files"
+            exit 1
+          fi
+          if git diff --name-only HEAD~1 | grep -E '\.(rs|yaml)$' | xargs grep -L "ONTO-PHASE:"; then
+            echo "❌ Missing ONTO-PHASE in new files"
+            exit 1
+          fi
+
+      - name: Declare Verdict
+        run: |
+          echo "⚖️  ontoCMS Ontological Court: COMPLIANT"
+          echo "   All contributions align with:"
+          echo "   - Three Laws of Ontogenesis"
+          echo "   - AENGA (no external governance)"
+          echo "   - SGRL-α (ethical license)"
+```

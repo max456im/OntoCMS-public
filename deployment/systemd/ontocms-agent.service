@@ -1,0 +1,43 @@
+```ini
+# SPDX-License-Identifier: GPL-3.0-only
+# ontoCMS Systemd Unit — Local Mirror + Public Hub
+
+[Unit]
+Description=ontoCMS Autonomous Agent
+Documentation=https://github.com/ontocms/ontocms
+After=network.target
+
+[Service]
+Type=simple
+User=ontocms
+Group=ontocms
+WorkingDirectory=/var/lib/ontocms
+Environment=ONTO_PROFILE=Scorpio-Water-Snake
+Environment=ONTO_PHASE=Slow
+Environment=RUST_LOG=info
+
+# Без привилегий — AENGA compliant
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+
+# Онтологически нейтральные пути
+ReadWritePaths=/var/lib/ontocms/local_mirror
+ReadOnlyPaths=/usr/share/ontocms/profiles
+
+ExecStart=/usr/local/bin/ontocms-agent \
+    --local-mirror /var/lib/ontocms/local_mirror \
+    --profiles /usr/share/ontocms/profiles \
+    --phase slow
+
+# Автоматический перезапуск при фазовом сбое
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```

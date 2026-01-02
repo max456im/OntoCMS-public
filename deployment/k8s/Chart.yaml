@@ -1,0 +1,42 @@
+
+```yaml
+# SPDX-License-Identifier: GPL-3.0-only
+apiVersion: v2
+name: ontocms-public-hub
+description: ontoCMS Public Hub (IPFS/libp2p) — AENGA-compliant
+type: application
+version: 0.1.0
+appVersion: "1.0"
+home: https://ontocms.org
+icon: https://ontocms.org/logo.svg
+```
+
+### **`deployment/k8s/values.yaml`**
+
+```yaml
+# Онтологический профиль узла
+profile: "Aquarius-Metal-Monkey"
+phase: "Heyday"
+
+# IPFS/libp2p
+ipfs:
+  enabled: true
+  gateway: "https://ipfs.io"
+  bootstrapPeers:
+    - "/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN"
+
+# Запрет на внешнее управление (AENGA)
+security:
+  allowPrivileged: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 65534  # nobody
+
+# **Важно**: Helm-чарт **только для Public Hub**, **не для ядра**. Ядро остаётся локальным.
+
+# Только публичные события
+filter:
+  allowBiometric: false
+  allowEnergyMetrics: false
+```
+

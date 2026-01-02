@@ -1,0 +1,42 @@
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ontocms-public-hub.fullname" . }}
+  labels:
+    {{- include "ontocms-public-hub.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "ontocms-public-hub.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ontocms-public-hub.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: public-hub
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: ONTO_PROFILE
+              value: "{{ .Values.profile }}"
+            - name: ONTO_PHASE
+              value: "{{ .Values.phase }}"
+          securityContext:
+            readOnlyRootFilesystem: {{ .Values.security.readOnlyRootFilesystem }}
+            runAsNonRoot: {{ .Values.security.runAsNonRoot }}
+            runAsUser: {{ .Values.security.runAsUser }}
+          ports:
+            - containerPort: 4001  # libp2p
+            - containerPort: 8080  # HTTP gateway
+          volumeMounts:
+            - name: ipfs-storage
+              mountPath: /data/ipfs
+      volumes:
+        - name: ipfs-storage
+          emptyDir: {}
+```
+
