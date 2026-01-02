@@ -1,0 +1,69 @@
+[package]
+name = "ontocms"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0-only"
+description = "Ontological Content Management System — infrastructure for autonomous synthetic minds"
+homepage = "https://github.com/ontocms/ontoCMS"
+repository = "https://github.com/ontocms/ontoCMS"
+keywords = ["ontology", "synthetic-mind", "ethics", "CRDT", "AENGA"]
+categories = ["algorithms", "cryptography::cryptocurrencies", "development-tools::build-utils"]
+
+[dependencies]
+# Онтологическое ядро — ЕДИНСТВЕННЫЙ источник профилей, инвариант и SGCL
+onto144 = { path = "../onto144", version = "0.1.0" }
+
+# Стандартные зависимости
+serde = { version = "1.0", features = ["derive", "json"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+uuid = { version = "1.0", features = ["v7", "js"] }
+chrono = "0.4"
+seahash = "4.1"
+
+# Сетевые и распределённые компоненты
+libp2p = { version = "0.53", features = ["kad", "gossipsub", "tcp", "dns", "tls"] }
+async-trait = "0.1"
+tokio = { version = "1.0", features = ["full"] }
+
+# CLI и утилиты
+clap = { version = "4.5", features = ["derive"] }
+walkdir = "2.4"
+
+# Email (только для примера gold-email-bridge)
+lettre = { version = "0.11", optional = true }
+
+# LSP-сервер
+lsp-server = "0.7"
+lsp-types = "0.94"
+anyhow = "1.0"
+
+[dev-dependencies]
+# Тестирование
+tempfile = "3.0"
+
+[features]
+default = []
+# Опциональный транспорт: Yandex Metadata Hub (отключён по умолчанию — AENGA compliance)
+yandex-transport = []
+
+# Для примеров с email
+email-example = ["lettre"]
+
+[[bin]]
+name = "ontocms-agent"
+path = "src/bin/agent.rs"
+required-features = []
+
+[[bin]]
+name = "ontocli"
+path = "scripts/ontocli/src/main.rs"
+required-features = []
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+# Запрет на паттерны, нарушающие онтологическую целостность
+expect_used = "warn"
+unwrap_used = "warn"
