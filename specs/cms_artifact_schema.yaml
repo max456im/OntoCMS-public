@@ -1,0 +1,177 @@
+# cms_artifact_schema.yaml
+# Схема артефакта в ONTO-144/ontoCMS — отражает структуру этически осознанного когнитивного следа
+# Соответствует Шести Канонам и онтологическому инварианту
+
+---
+$id: https://ontocms.org/schemas/cms_artifact_schema.yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+title: ONTO-144 Reflective Artifact
+description: Артефакт, фиксирующий когнитивное событие с гарантией субъектной целостности и этической валидности
+
+required:
+  - artifact_id
+  - created_at
+  - intent_vector
+  - perspective_frame
+  - affect_state
+  - alternatives_set
+  - invariant_signature
+  - revocability_proof
+  - jurisdiction_anchor
+
+properties:
+
+  artifact_id:
+    type: string
+    format: uuid
+    description: Уникальный идентификатор артефакта (версионированный)
+
+  created_at:
+    type: string
+    format: date-time
+    description: Время создания артефакта в UTC
+
+  # ——— КАНОН 1: Намерение требует этического вектора ———
+  intent_vector:
+    type: object
+    description: Этический вектор намерения — нормализованное направление в пространстве ценностей
+    required: [ direction, magnitude, source_canon ]
+    properties:
+      direction:
+        type: array
+        minItems: 3
+        maxItems: 8
+        items:
+          type: number
+          minimum: -1.0
+          maximum: 1.0
+        description: Направление в этическом пространстве (например: автономия, достоинство, справедливость)
+      magnitude:
+        type: number
+        minimum: 0.0
+        maximum: 1.0
+        description: Интенсивность намерения (0 = отсутствует, 1 = максимум)
+      source_canon:
+        type: string
+        enum: [ "covenant_culture", "covenant_activity", "covenant_freedom" ]
+        description: Высший ковенант, породивший намерение
+
+  # ——— КАНОН 2: Убеждение существует только в перспективе ———
+  perspective_frame:
+    type: object
+    description: Контекст, в котором сформулировано убеждение или суждение
+    required: [ perspective_id, validity_scope, subject_boundary ]
+    properties:
+      perspective_id:
+        type: string
+        description: Идентификатор перспективы (например: user:123, role:moderator, culture:za)
+      validity_scope:
+        type: string
+        enum: [ transient, session, persistent ]
+        description: Продолжительность валидности убеждения
+      subject_boundary:
+        type: string
+        description: Границы субъекта, к которому относится перспектива
+
+  # ——— КАНОН 3: Разрешается временный гнев, но не постоянное унижение ———
+  affect_state:
+    type: object
+    description: Состояние аффекта, строго ограниченное по времени и достоинству
+    required: [ type, is_transient, dignity_preserved, decay_at ]
+    properties:
+      type:
+        type: string
+        enum: [ neutral, transient_anger, transient_joy, transient_sorrow, other ]
+      is_transient:
+        type: boolean
+        const: true
+        description: Обязательно true — постоянные аффекты не допускаются
+      dignity_preserved:
+        type: boolean
+        description: Даже в гневе достоинство субъекта не нарушено
+      decay_at:
+        type: string
+        format: date-time
+        description: Время автоматического распада аффекта (обычно +5–30 мин от created_at)
+
+  # ——— КАНОН 4: Альтернативы должны быть представлены в фактах ———
+  alternatives_set:
+    type: array
+    minItems: 1
+    description: Набор альтернативных толкований, действий или путей
+    items:
+      type: object
+      required: [ id, description, ethical_vector, feasibility ]
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        ethical_vector:
+          type: array
+          minItems: 3
+          maxItems: 8
+          items:
+            type: number
+        feasibility:
+          type: number
+          minimum: 0.0
+          maximum: 1.0
+
+  # ——— КАНОН 5: После факта вреда инвариант должен быть обновлён ———
+  invariant_signature:
+    type: string
+    format: sha256
+    description: Хеш текущего онтологического инварианта (после учёта всех предыдущих вредов)
+
+  post_harm_flag:
+    type: boolean
+    default: false
+    description: Указывает, был ли артефакт создан в пост-вредовом режиме
+
+  # ——— КАНОН 6: Субъект всегда может отозвать намерение на основе обоснованной перспективы ———
+  revocability_proof:
+    type: object
+    description: Доказательство возможности отзыва
+    required: [ revocable, perspective_condition, revocation_window ]
+    properties:
+      revocable:
+        type: boolean
+        description: Может ли субъект отозвать это намерение
+      perspective_condition:
+        type: string
+        description: Условие новой перспективы, дающей право на отзыв (например: "если выявлено искажение данных")
+      revocation_window:
+        type: string
+        format: duration
+        description: ISO 8601 длительность окна отзыва (например: "P7D" = 7 дней)
+
+  # ——— Юрисдикционная привязка ———
+  jurisdiction_anchor:
+    type: string
+    enum: [ CN, ZA, BR, GLOBAL ]
+    description: Активный юрисдикционный профиль, определяющий интерпретацию канонов
+
+  # ——— Метаданные артефакта ———
+  provenance:
+    type: object
+    properties:
+      emitter_id:
+        type: string
+        description: Идентификатор источника (онтотранспондера, модуля и т.п.)
+      session_id:
+        type: string
+        format: uuid
+      parent_artifact_id:
+        type: string
+        format: uuid
+
+  # ——— Защита от редукции профиля ———
+  profile_reduction_blocked:
+    type: boolean
+    const: true
+    description: Артефакт не может быть использован для редукции субъекта до статического профиля
+
+...

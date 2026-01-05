@@ -1,0 +1,19 @@
+# Core runtime dependencies
+PyYAML>=6.0
+jsonschema>=4.18.0
+pydantic>=2.5.0
+python-dotenv>=1.0.0
+
+# Licensing & covenant enforcement
+license-expression>=30.3.1
+
+# Testing & validation
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Security & integrity
+cryptography>=41.0.0
+tuf>=4.0.0  # For secure update frameworks (optional but aligned with integrity goals)
+
+# Optional: for jurisdiction-aware runtime
+requests>=2.31.0  # If fetching dynamic jurisdiction profiles

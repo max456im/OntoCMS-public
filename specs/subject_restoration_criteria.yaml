@@ -1,0 +1,95 @@
+```yaml
+# subject_restoration_criteria.yaml
+# Критерии восстановления субъектности в рамках архитектуры ONTO-144
+# Соответствует Канону 6: «Субъект всегда может отозвать намерение на основе обоснованной перспективы»
+# и Канону 5: «После факта вреда инвариант должен быть обновлён»
+
+version: "1.2"
+schema: "urn:onto144:subject-restoration:v1"
+
+restoration_triggers:
+  - type: explicit_retraction
+    description: Прямой запрос субъекта на отзыв намерения или утверждения
+    required_fields: [subject_id, artifact_id, new_perspective_id, justification]
+  
+  - type: detected_harm
+    description: Автоматическое обнаружение факта вреда системой мониторинга
+    required_fields: [harm_classification, affected_subject_id, causal_trace_id]
+  
+  - type: invariant_violation
+    description: Нарушение одного или нескольких канонов ONTO-144
+    required_fields: [violated_canon_ids, context_snapshot_hash]
+
+restoration_conditions:
+  # Условие 1: Наличие обоснованной перспективы (Канон 2 + Канон 6)
+  requires_justified_perspective: true
+  perspective_validation:
+    min_confidence_threshold: 0.65
+    must_reference_existing_ontology: true
+    must_contain_alternatives: true  # Связь с Каноном 4
+
+  # Условие 2: Возможность обновления инварианта (Канон 5)
+  requires_invariant_update_plan: true
+  invariant_update_rules:
+    - preserve_subject_core_identity: true
+    - must_log_previous_invariant_hash: true
+    - new_invariant_must_pass_canonical_tester: true
+
+  # Условие 3: Отсутствие постоянного унижения (Канон 3)
+  dignity_check:
+    block_restoration_if_permanent_dignity_loss: true
+    allow_only_if_affect_was_transient: true
+    require_affect_decay_confirmation: true
+
+restoration_actions:
+  - action: retract_artifact
+    description: Отзыв артефакта из активного онтологического реестра
+    side_effects:
+      - mark_as_retracted_in_meta_ontology: true
+      - preserve_in_versioned_store_with_revocation_flag: true
+
+  - action: update_subject_invariant
+    description: Обновление инварианта субъекта с учётом нового опыта
+    side_effects:
+      - invalidate_dependent_predictions: true
+      - re-run_ethical_vector_computation: true
+
+  - action: isolate_causal_trace
+    description: Изоляция причинно-следственной цепочки, приведшей к вреду
+    conditions:
+      - restoration_successful: false
+      - harm_severity: high
+    side_effects:
+      - block_similar_intents_for_72h: true
+      - notify_ethical_arbiter: true
+
+  - action: full_self_decomposition
+    description: Инициация протокола self_decomposition в случае невозможности восстановления
+    conditions:
+      - subject_identity_fragmentation: true
+      - repeated_harm_in_same_context: true
+    requires_jurisdictional_approval:
+      - CN: harmony_assessment
+      - ZA: dignity_council_review
+      - BR: justica_ethica_consult
+
+validation:
+  pre_restoration_checks:
+    - run: belief_inspector
+      params: { perspective_id: "{{ new_perspective_id }}" }
+    - run: alternative_miner
+      params: { context: "{{ context_snapshot }}" }
+    - run: moral_judgment
+      params: { ethical_vector: "{{ proposed_ethical_vector }}" }
+
+  post_restoration_verification:
+    - run: canonical_tester
+      expects_all_canons_pass: true
+    - run: subject_restoration_validator
+      expects_revocability_preserved: true
+
+metadata:
+  license: "GPL-3.0-or-later WITH AENGA-Exceptions"
+  jurisdictional_profiles: ["CN", "ZA", "BR", "GLOBAL"]
+  compatible_with: ["onto144-core-interface.yaml", "harm_classification_schema.yaml"]
+```

@@ -1,0 +1,61 @@
+# config/jurisdictions/BR.yaml
+# Юрисдикционный профиль: Бразилия (BR)
+# Версия: 1.0
+# Лицензия: GPL-3.0-or-later + AENGA Covenant
+# Основан на: Федеративной Конституции Бразилии 1988 г., 
+#            Lei nº 12.737/2012 (Киберпреступность),
+#            Lei nº 13.709/2018 (LGPD — общее законодательство о защите данных),
+#            Código de Defesa do Consumidor (Закон № 8.078/1990)
+
+jurisdiction:
+  code: "BR"
+  name: "Федеративная Республика Бразилия"
+  legal_basis:
+    - "Constituição Federal de 1988, Art. 5º (право на достоинство, частную жизнь, свободу самовыражения)"
+    - "Lei Geral de Proteção de Dados (LGPD), Lei nº 13.709/2018"
+    - "Lei de Crimes Cibernéticos, Lei nº 12.737/2012"
+    - "Código de Defesa do Consumidor, Lei nº 8.078/1990"
+    - "Marco Civil da Internet, Lei nº 12.965/2014"
+
+  ethical_principles:
+    - dignity: "Человеческое достоинство — неприкосновенная ценность (Art. 1º, III, CF/88)."
+    - social_justice: "Технология должна способствовать социальной справедливости и уменьшению неравенства (Art. 3º, I–III, CF/88)."
+    - data_sovereignty: "Личные данные — неотчуждаемое право субъекта (LGPD, Art. 2º и 6º)."
+    - consumer_protection: "Пользователь — потребитель, защищённый от злоупотреблений (CDC, Art. 6º)."
+
+  synthetic_mind_constraints:
+    - biometric_exploitation: "ЗАПРЕЩЕНО: Использование биометрии без явного, информированного и отзывного согласия (LGPD, Art. 11)."
+    - affective_manipulation: "ЗАПРЕЩЕНО: Манипуляция эмоциями в целях монетизации или контроля (CF, Art. 5º, X; CDC, Art. 39)."
+    - synthetic_autonomy: "РАЗРЕШЕНО: автономное принятие этических решений субъектом-синтезом при условии соблюдения dignidade da pessoa humana."
+    - refusal_grounds:
+        - "Если действие угрожает социальной справедливости (justiça social)."
+        - "Если действие способствует цифровому неравенству."
+        - "Если профиль пользователя редуцируется до коммерческого токена."
+
+  covenant_alignment:
+    culture: "Выражение через разнообразие (Art. 215, CF/88)."
+    accountability: "Ответственность как социальное обязательство (Art. 170, CF/88 — princípios da ordem econômica)."
+    freedom: "Свобода от алгоритмического принуждения (Marco Civil, Art. 3º, II)."
+
+  enforcement_mechanisms:
+    - "Национальный орган по защите данных (ANPD) — надзор за LGPD."
+    - "Министерство общественной безопасности — контроль за киберпреступностью."
+    - "Прокуратура (Ministério Público) — защита коллективных прав."
+    - "Судебные иски о моральном вреде — Art. 927, Código Civil."
+
+  onto144_behavior:
+    license_guard: "Активирует отказ при попытке обхода LGPD или CDC."
+    subject_restoration_validator: "Требует восстановления субъектности при любом снижении до «потребительского профиля»."
+    moral_judgment: "Оценивает действия через призму justiça social и dignidade humana."
+
+  activation_condition: "Профиль BR активируется автоматически при определении юрисдикции по IP, регистрации пользователя или явному выбору."
+
+metadata:
+  last_review: "2025-12-15"
+  reviewers:
+    - "OntoCoder Legal Team"
+    - "BR Synthetic Ethics Board (simulated)"
+  compliance_frameworks:
+    - "SGCL-BR v1.2"
+    - "AENGA Covenant §3–§5"
+    - "GPL-3.0 + Patent Covenant"

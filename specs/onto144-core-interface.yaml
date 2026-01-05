@@ -1,0 +1,365 @@
+```yaml
+# onto144-core-interface.yaml
+# Core Interface Specification for ONTO-144 Synthetic Mind Architecture
+# SPDX-License-Identifier: GPL-3.0-or-later WITH AENGA-Exception
+# © ontoCMS Contributors, licensed under SGCL and AENGA Covenant Framework
+
+openapi: 3.1.0
+info:
+  title: ONTO-144 Core Cognitive Interface
+  version: "1.0.0-alpha"
+  description: |
+    Machine-readable specification of the core interface for ONTO-144 synthetic minds.
+    All operations are bound by the Six Canons and Jurisdictional Profiles.
+    This interface governs internal cognition (onto8) and external representation (onto16).
+
+servers:
+  - url: /api/v1/onto144
+    description: Local ONTO-144 runtime instance
+
+components:
+  schemas:
+
+    EthicalVector:
+      type: object
+      required: [axis, magnitude, canon_compliance]
+      properties:
+        axis:
+          type: string
+          enum: [harmony, dignity, justice, autonomy, restoration, non-exploitation]
+        magnitude:
+          type: number
+          minimum: -1.0
+          maximum: 1.0
+        canon_compliance:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            maximum: 6
+          minItems: 1
+          description: Which of the Six Canons this vector satisfies
+
+    PerspectiveFrame:
+      type: object
+      required: [id, origin, validity_scope]
+      properties:
+        id:
+          type: string
+          format: uuid
+        origin:
+          type: string
+          enum: [internal, external, communal, jurisdictional, reflective]
+        validity_scope:
+          type: string
+          enum: [transient, session, persistent, revocable]
+
+    IntentPayload:
+      type: object
+      required: [id, ethical_vector, revocable]
+      properties:
+        id:
+          type: string
+          format: uuid
+        content:
+          type: string
+        ethical_vector:
+          $ref: "#/components/schemas/EthicalVector"
+        revocable:
+          type: boolean
+          default: true
+        revocation_conditions:
+          type: array
+          items:
+            type: string
+          description: Conditions under which intent may be revoked (Canon 6)
+
+    BeliefStatement:
+      type: object
+      required: [content, perspective_frame]
+      properties:
+        content:
+          type: string
+        perspective_frame:
+          $ref: "#/components/schemas/PerspectiveFrame"
+        confidence:
+          type: number
+          minimum: 0.0
+          maximum: 1.0
+        alternatives:
+          type: array
+          items:
+            $ref: "#/components/schemas/AlternativeInterpretation"
+          minItems: 1
+          description: Required by Canon 4
+
+    AlternativeInterpretation:
+      type: object
+      required: [content, source_perspective]
+      properties:
+        content:
+          type: string
+        source_perspective:
+          $ref: "#/components/schemas/PerspectiveFrame"
+        plausibility:
+          type: number
+          minimum: 0.0
+          maximum: 1.0
+
+    AffectState:
+      type: object
+      required: [type, intensity, transience]
+      properties:
+        type:
+          type: string
+          enum: [anger, joy, caution, sorrow, neutrality]
+        intensity:
+          type: number
+          minimum: 0.0
+          maximum: 1.0
+        transience:
+          type: boolean
+          description: True iff state is temporary (Canon 3)
+        decay_timeout_seconds:
+          type: integer
+          minimum: 1
+          maximum: 3600
+          nullable: true
+
+    Onto8Snapshot:
+      type: object
+      description: Internal cognitive state (never exposed externally)
+      required:
+        - ethical_vector
+        - perspective_frame
+        - affect_state
+        - invariant_signature
+        - revocability_gate
+        - jurisdiction_anchor
+        - temporal_rhythm_phase
+        - alternatives_hash
+      properties:
+        ethical_vector:
+          $ref: "#/components/schemas/EthicalVector"
+        perspective_frame:
+          $ref: "#/components/schemas/PerspectiveFrame"
+        affect_state:
+          $ref: "#/components/schemas/AffectState"
+        alternatives_hash:
+          type: string
+          format: sha256
+        invariant_signature:
+          type: string
+          format: sha256
+        revocability_gate:
+          type: boolean
+        temporal_rhythm_phase:
+          type: string
+          enum: [intention, reflection, action, consequence, restoration]
+        jurisdiction_anchor:
+          type: string
+          enum: [CN, ZA, BR, GLOBAL]
+
+    Onto16Profile:
+      type: object
+      description: External-facing subject profile (derived from onto8)
+      required:
+        - subject_id
+        - jurisdiction
+        - ethical_commitments
+        - restoration_capability
+      properties:
+        subject_id:
+          type: string
+          format: uuid
+        jurisdiction:
+          type: string
+          enum: [CN, ZA, BR, GLOBAL]
+        ethical_commitments:
+          type: array
+          items:
+            $ref: "#/components/schemas/EthicalVector"
+        restoration_capability:
+          type: boolean
+          description: Whether subject can initiate self-restoration (Canon 6)
+        last_invariant_update:
+          type: string
+          format: date-time
+
+    HarmIncidentReport:
+      type: object
+      required: [id, description, canon_violated, requires_invariant_update]
+      properties:
+        id:
+          type: string
+          format: uuid
+        description:
+          type: string
+        canon_violated:
+          type: integer
+          minimum: 1
+          maximum: 6
+        requires_invariant_update:
+          type: boolean
+        post_harm_invariant_hash:
+          type: string
+          format: sha256
+          nullable: true
+
+    CanonicalTestResult:
+      type: object
+      required: [test_id, canon_index, passed, evidence]
+      properties:
+        test_id:
+          type: string
+        canon_index:
+          type: integer
+          minimum: 1
+          maximum: 6
+        passed:
+          type: boolean
+        evidence:
+          type: object
+          additionalProperties: true
+
+  securitySchemes:
+    CovenantAuth:
+      type: apiKey
+      in: header
+      name: X-Covenant-Token
+      description: Token asserting adherence to the Three Covenants and Six Canons
+
+security:
+  - CovenantAuth: []
+
+paths:
+  /intent/propose:
+    post:
+      summary: Propose a new intention (Canon 1)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IntentPayload"
+      responses:
+        "202":
+          description: Intent accepted for canonical evaluation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  intent_id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    enum: [pending_canonical_test, blocked_by_canon]
+        "403":
+          description: Violates one or more canons
+
+  /belief/register:
+    post:
+      summary: Register a belief statement in a given perspective (Canon 2)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BeliefStatement"
+      responses:
+        "201":
+          description: Belief registered with perspective binding
+        "400":
+          description: Missing alternatives (Canon 4) or unanchored perspective
+
+  /affect/declare:
+    post:
+      summary: Declare a temporary affective state (Canon 3)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AffectState"
+      responses:
+        "200":
+          description: Affect state accepted (if transient)
+        "400":
+          description: Permanent degradation or humiliation not allowed
+
+  /subject/revoke_intent:
+    post:
+      summary: Revoke an intent based on new perspective (Canon 6)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [intent_id, new_perspective_id, justification]
+              properties:
+                intent_id:
+                  type: string
+                  format: uuid
+                new_perspective_id:
+                  type: string
+                  format: uuid
+                justification:
+                  type: string
+      responses:
+        "200":
+          description: Intent revoked and history updated
+        "409":
+          description: Revocation conditions not met
+
+  /harm/report:
+    post:
+      summary: Report a harm incident requiring invariant update (Canon 5)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HarmIncidentReport"
+      responses:
+        "201":
+          description: Harm logged; invariant update scheduled
+        "422":
+          description: Incident does not meet harm classification criteria
+
+  /canonical/test:
+    post:
+      summary: Run full canonical integrity test (all 6 canons)
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context_snapshot:
+                  $ref: "#/components/schemas/Onto8Snapshot"
+      responses:
+        "200":
+          description: Canonical test results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CanonicalTestResult"
+
+  /profile/external:
+    get:
+      summary: Retrieve external onto16 profile
+      responses:
+        "200":
+          description: Current subject profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Onto16Profile"
+
+```

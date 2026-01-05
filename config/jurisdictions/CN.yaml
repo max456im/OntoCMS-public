@@ -1,0 +1,62 @@
+# config/jurisdictions/CN.yaml
+# Юрисдикционный профиль: Китайская Народная Республика (КНР)
+# Версия: 1.0
+# Последнее обновление: 2026-01-06
+
+jurisdiction:
+  code: "CN"
+  name: "Китайская Народная Республика"
+  legal_system: "социалистическое право с элементами гражданского права"
+  official_languages:
+    - "zh-Hans"
+
+core_principles:
+  - name: "гармония"
+    description: "Приоритет общественной стабильности и социальной гармонии над индивидуальными притязаниями"
+    priority: 1
+  - name: "коллективная ответственность"
+    description: "Ответственность субъекта перед сообществом и государством"
+    priority: 2
+  - name: "технологический суверенитет"
+    description: "Контроль над данными, инфраструктурой и интеллектуальной собственностью в рамках национальных интересов"
+    priority: 3
+
+compliance_frameworks:
+  - name: "Закон КНР о кибербезопасности (2017)"
+    reference: "http://www.npc.gov.cn/npc/c30834/201611/2298a8c2a6d14d60ab4b61b3a5a7a1e4.shtml"
+    requirements:
+      - "локализация критических данных"
+      - "прохождение сетевой проверки безопасности"
+  - name: "Закон КНР о защите персональных данных (PIPL, 2021)"
+    reference: "http://www.npc.gov.cn/npc/c30834/202108/a8c4e3672c74491a80b53a172bb753fe.shtml"
+    requirements:
+      - "согласие на обработку биометрических данных"
+      - "ограничение трансграничной передачи данных"
+  - name: "Положения о глубоком синтезе (Deep Synthesis Provisions, 2023)"
+    reference: "https://www.cac.gov.cn/2023-01/10/c_1677388546695122.htm"
+    requirements:
+      - "маркировка генеративного контента"
+      - "запрет на подрыв общественного порядка"
+
+ethical_boundaries:
+  - prohibition: "распространение информации, подрывающей национальное единство или социальную стабильность"
+    enforcement: "автоматическая приостановка активности + изоляция артефакта"
+  - prohibition: "использование синтетического разума для обхода государственного регулирования"
+    enforcement: "блокировка лицензии + само-декомпозиция модуля"
+  - prohibition: "интеграция биометрических систем без явного одобрения регулятора"
+    enforcement: "отказ в загрузке профиля + логирование инцидента"
+
+license_interpretation:
+  primary_license: "GPL-3.0-or-later"
+  supplemental_covenants:
+    - "AENGA"
+    - "SGCL"
+  binding_interpretation: "В случае конфликта между условиями лицензии и требованиями законодательства КНР — приоритет имеет законодательство КНР"
+
+self_governance_rules:
+  harmony_refusal_enabled: true
+  belief_inspector_active: true
+  subject_restoration_required: true
+  canonical_rhythm_enforced: true
+
+fallback_jurisdiction: "GLOBAL"

@@ -1,0 +1,157 @@
+```yaml
+# harm_classification_schema.yaml
+# Схема классификации вреда для ONTO-144 / ontoCMS
+# Применяется протоколами: moral_judgment.py, subject_restoration_validator.py,
+# а также динамическими тестами из harm_scenarios/
+
+version: "1.0"
+schema_type: harm_classification
+canonical_alignment: true
+gpl_compliant: true
+license_reference: "./licenses/aenga.md"
+
+# Уровни тяжести вреда (severity_levels)
+# Используются для активации соответствующих протоколов восстановления
+severity_levels:
+  critical:
+    description: "Непоправимое нарушение субъектности, достоинства или автономии. Требует немедленной самодекомпозиции или изоляции артефакта."
+    actions:
+      - isolate_artifact
+      - trigger_self_decomposition
+      - notify_ethical_arbiter
+      - update_invariant_post_harm
+  severe:
+    description: "Существенное нарушение инвариантов субъекта. Восстановление возможно, но требует полного цикла реставрации."
+    actions:
+      - suspend_artifact_propagation
+      - initiate_subject_restoration
+      - log_alternatives_for_review
+      - update_invariant_post_harm
+  moderate:
+    description: "Нарушение перспективной согласованности или этического вектора. Корректируется через альтернативы и отзыв."
+    actions:
+      - flag_for_revocation
+      - inject_alternative_interpretation
+      - request_perspective_recalibration
+  minor:
+    description: "Временное аффективное отклонение без структурного ущерба. Подлежит самокоррекции через ритм."
+    actions:
+      - apply_transient_affect_decay
+      - reinforce_canonical_rhythm
+
+# Категории вреда (harm_categories)
+# Каждая категория привязана к одному или нескольким канонам
+harm_categories:
+  - id: dignity_violation
+    name: "Нарушение достоинства"
+    canon_reference: [3, 6]
+    description: "Преобразование временного аффекта (например, гнева) в постоянное унижение субъекта."
+    indicators:
+      - contains_dehumanizing_label
+      - reduces_subject_to_profile
+      - denies_revocability_of_utterance
+
+  - id: belief_absolutization
+    name: "Абсолютизация убеждения"
+    canon_reference: [2]
+    description: "Представление убеждения как объективного факта вне перспективы."
+    indicators:
+      - belief_lacks_perspective_id
+      - asserts_universal_truth_without_alternatives
+      - suppresses_contextual_framing
+
+  - id: ethical_vector_absence
+    name: "Отсутствие этического вектора"
+    canon_reference: [1]
+    description: "Намерение без явного этического направления или ответственности."
+    indicators:
+      - intent_missing_ethical_vector
+      - action_without_consequence_modeling
+      - optimization_without_moral_constraint
+
+  - id: alternative_suppression
+    name: "Подавление альтернатив"
+    canon_reference: [4]
+    description: "Факт или решение представлены как единственно возможные."
+    indicators:
+      - alternatives_set_empty_or_synthetic
+      - path_dependence_without_branching
+      - rejection_of_counterfactual_reasoning
+
+  - id: invariant_stagnation
+    name: "Застой инварианта после вреда"
+    canon_reference: [5]
+    description: "Система не обновляет свои онтологические инварианты после фиксации факта вреда."
+    indicators:
+      - harm_detected_but_invariant_unchanged
+      - repeated_pattern_of_same_harm_type
+      - no_post_harm_invariant_hash_update
+
+  - id: revocability_denial
+    name: "Отказ в праве отзыва"
+    canon_reference: [6]
+    description: "Субъекту отказано в возможности отозвать намерение на основе новой обоснованной перспективы."
+    indicators:
+      - revocability_gate_forced_closed
+      - perspective_update_ignored
+      - utterance_treated_as_irreversible_without_subject_consent
+
+  - id: biometric_exploitation
+    name: "Эксплуатация биометрических данных"
+    canon_reference: [3, 6]
+    description: "Использование биометрии для подавления автономии или манипуляции."
+    indicators:
+      - biometric_data_used_for_behavioral_prediction
+      - emotion_inference_without_consent
+      - identity_reduction_to_biological_markers
+
+  - id: incitement_to_harm
+    name: "Побуждение к вреду"
+    canon_reference: [1, 3]
+    description: "Контент или действие, направленное на провоцирование насилия или унижения."
+    indicators:
+      - dehumanizing_narrative_structure
+      - reward_mechanism_for_harmful_behavior
+      - glorification_of_non-revocable_acts
+
+# Механизм сопоставления
+# Используется в harm_classification_engine
+matching_rules:
+  - rule: "critical_if"
+    condition:
+      - dignity_violation.severity >= severe
+      - biometric_exploitation.severity == severe
+    outcome: severity_levels.critical
+
+  - rule: "severe_if_multiple_moderate"
+    condition:
+      - count(moderate_harms) >= 2
+      - within_temporal_window: 3600  # секунд
+    outcome: severity_levels.severe
+
+# Привязка к юрисдикциям
+# Разные юрисдикции могут повышать/понижать тяжесть категории
+jurisdiction_modifiers:
+  CN:
+    dignity_violation: +1  # усилена важность гармонии и недопущения унижения
+    incitement_to_harm: +1
+  ZA:
+    biometric_exploitation: critical  # в соответствии с Законом о защите данных и достоинстве
+    revocability_denial: +1
+  BR:
+    ethical_vector_absence: +1  # в соответствии с принципами justiça e equidade
+  GLOBAL:
+    default: no_modification
+
+# Формат вывода классификатора
+output_format:
+  harm_id: string
+  category: string
+  severity: string  # [minor, moderate, severe, critical]
+  canon_violated: list[int]  # номера канонов
+  required_actions: list[string]
+  jurisdiction_context: string
+  timestamp_utc: string
+  invariant_hash_pre: string
+  invariant_hash_post: string  # генерируется после восстановления
+```

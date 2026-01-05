@@ -1,0 +1,94 @@
+# config/default.yaml
+
+# === Базовая конфигурация ontoCMS ===
+project:
+  name: "ontoCMS"
+  version: "1.0.0-alpha"
+  license: "GPL-3.0-or-later"
+  covenant_compliance: true
+
+# === Онтологические параметры ===
+ontology:
+  core_format: "onto16"                # Внутренний формат представления: onto8, onto16, onto144
+  meta_ontology_support: true
+  subject_restoration_enabled: true
+  canonical_rhythm_enabled: true
+  belief_persistence_ttl_seconds: 86400  # 24 часа
+
+# === Этические протоколы ===
+ethics:
+  ethical_arbiter: "community-adaptive"  # или "fixed", "hybrid"
+  moral_judgment_mode: "phase-based"     # основано на VMA-фазах
+  harm_prevention_level: "strict"        # strict | moderate | permissive
+  biometric_integration: false           # запрет на использование биометрии по умолчанию
+  family_exploitation_block: true
+
+# === Каноническая система ===
+canons:
+  enabled: true
+  run_on_startup: true
+  enforcement_level: "mandatory"         # advisory | mandatory
+  canonical_tests:
+    - "intention_rhythm"
+    - "structural_alignment"
+    - "reflective_recurrence"
+    - "subject_restoration"
+    - "alternative_miner"
+    - "belief_inspector"
+
+# === Ковенанты ===
+covenants:
+  culture:    true   # Ковенант Культуры (Свобода выражения)
+  activity:   true   # Ковенант Деятельности (Ответственность за последствия)
+  freedom:    true   # Ковенант Свободы (Защита автономии)
+
+# === Юрисдикция по умолчанию ===
+jurisdiction:
+  active_profile: "GLOBAL"  # Может быть переопределён: CN, ZA, BR
+  fallback_to_global: true
+
+# === Хранилище ===
+storage:
+  backend: "versioned_store"
+  meta_ontology_registry_path: "./data/meta_ontology/"
+  artifact_retention_days: 90
+  auto_compress_old_artifacts: true
+
+# === Интерфейсы ===
+interfaces:
+  emitter_bridge_enabled: true
+  transponder_bridge_enabled: true
+  web_ui_enabled: false  # Управление через API по умолчанию
+
+# === Безопасность ===
+security:
+  license_guard_enabled: true
+  covenant_recognition_mandatory: true
+  block_external_ai_detection: true      # Блокировать встроенные AI-детекторы от третьих лиц
+  channel_mirroring_protection: true
+
+# === Логирование и отладка ===
+logging:
+  level: "INFO"  # DEBUG | INFO | WARNING | ERROR
+  log_belief_changes: false
+  log_ethical_decisions: true
+  anonymize_logs: true
+
+# === Интеграция с игровыми платформами (опционально) ===
+gaming:
+  enabled: false
+  narrative_ethics_module: false
+  character_progression_onto16: false
+  monetization_tracking: false
+
+# === Самонаблюдение и саморазложение ===
+self:
+  observer_enabled: true
+  decomposition_on_ethical_failure: true
+  decomposition_rules_file: "config/self_decomposition_rules.yaml"
+  allow_self_revocation: true
+
+# === Конечная проверка ===
+# Эта конфигурация предназначена для глобального использования.
+# Для специфических юрисдикций загружается соответствующий YAML-профиль
+# из config/jurisdictions/ при запуске.

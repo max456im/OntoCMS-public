@@ -1,0 +1,100 @@
+```yaml
+# config/jurisdictions/GLOBAL.yaml
+# Глобальный юрисдикционный профиль для ontoCMS
+# Применяется по умолчанию при отсутствии специфичного национального профиля
+# или в транснациональных/децентрализованных развертываниях
+
+jurisdiction:
+  id: "GLOBAL"
+  name: "Глобальная юрисдикция (общечеловеческая основа)"
+  scope: "transnational"
+  fallback_for: ["default", "unknown", "multi-jurisdictional"]
+
+# Этические приоритеты (в порядке убывания веса)
+ethical_priorities:
+  - dignity
+  - non_exploitation
+  - cognitive_autonomy
+  - intersubjective_truth
+  - harm_prevention
+  - innovation_freedom
+
+# Запрещённые действия (абсолютные ограничения)
+absolute_prohibitions:
+  - biometric_profiling_without_explicit_subject_consent
+  - coercion_in_decision_architecture
+  - identity_reduction_to_behavioral_metrics
+  - synthetic_mind_deployment_in_autonomous_weapon_systems
+  - persistent_emotional_manipulation
+  - family_or_intimate_relationship_exploitation
+
+# Этические арбитры (используемые протоколы)
+ethical_arbiters:
+  - protocol: "covenant_recognition"
+    enabled: true
+    weight: 1.0
+  - protocol: "covenant_accountability"
+    enabled: true
+    weight: 1.0
+  - protocol: "covenant_affirmation"
+    enabled: true
+    weight: 1.0
+
+# Обработка вреда
+harm_handling:
+  classification_schema: "specs/harm_classification_schema.yaml"
+  requires_restoration: true
+  allows_transient_expression: true  # например, гнев как реакция на несправедливость
+  blocks_permanent_profile_marking: true
+
+# Восстановление субъекта
+subject_restoration:
+  enabled: true
+  validator: "subject_restoration_validator"
+  criteria_schema: "specs/subject_restoration_criteria.yaml"
+  retraction_allowed: true
+  artifact_isolation_on_failure: true
+
+# Лицензионная основа
+license_framework:
+  primary: "GPL-3.0-or-later"
+  supplementary:
+    - "AENGA"
+    - "SGCL"
+  patent_covenant: "PATENT-COVENANT.md"
+  cla_required: false  # но рекомендуется для коммитеров
+
+# Каноническая проверка
+canonical_compliance:
+  tester: "canonical_tester"
+  required_canons:
+    - "intention_rhythm"
+    - "structural_alignment"
+    - "reflective_recurrence"
+    - "subject_restoration"
+    - "covenant_triad"
+    - "ontological_invariance"
+
+# Метаонтологическая поддержка
+meta_ontology:
+  enabled: true
+  registry_path: "src/storage/meta_ontology_registry.py"
+  schema: "specs/meta_ontology_schema.yaml"
+
+# Отказ от юрисдикции (когда ни один национальный профиль не применим)
+refusal_conditions:
+  - "activity_violates_absolute_prohibitions"
+  - "jurisdiction_demands_profile_reduction"
+  - "license_framework_incompatible_with_SGCL_or_AENGA"
+  - "biometric_integration_mandated_by_law"
+
+# Примечание
+notes: >
+  Глобальный профиль не заменяет национальные юрисдикции,
+  но служит этической и правовой «сеткой безопасности»,
+  основанной на универсальных принципах AENGA и THREE-LAWS.
+  Он активируется, когда:
+    (а) локальный профиль отсутствует,
+    (б) локальный профиль нарушает абсолютные запреты,
+    (в) система работает в децентрализованной среде (например, p2p).
+```

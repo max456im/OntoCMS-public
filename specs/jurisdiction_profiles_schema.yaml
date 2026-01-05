@@ -1,0 +1,171 @@
+```yaml
+# jurisdiction_profiles_schema.yaml
+# Схема валидации юрисдикционных профилей для ontoCMS
+# Версия: 1.0
+# Лицензия: GPL-3.0-or-later + AENGA Covenant
+
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://ontocms.org/schemas/jurisdiction_profiles_schema.yaml
+
+type: object
+properties:
+  jurisdiction_code:
+    type: string
+    pattern: "^[A-Z]{2}$"
+    description: "Код юрисдикции по ISO 3166-1 alpha-2 (например, CN, ZA, BR)."
+    examples: ["CN", "ZA", "BR", "GLOBAL"]
+
+  name:
+    type: string
+    description: "Полное название юрисдикции на английском языке."
+    examples: ["People's Republic of China", "Republic of South Africa", "Federative Republic of Brazil", "Global Default"]
+
+  native_name:
+    type: string
+    description: "Название юрисдикции на государственном языке."
+    examples: ["中华人民共和国", "Republiek van Suid-Afrika", "República Federativa do Brasil"]
+
+  legal_system:
+    type: string
+    enum: [civil_law, common_law, mixed, socialist, religious, customary]
+    description: "Тип правовой системы."
+    examples: ["socialist", "mixed", "civil_law"]
+
+  canonical_covenant_interpretation:
+    type: object
+    description: "Интерпретация Шести Канонов в данной юрисдикции."
+    properties:
+      # Канон 1: Намерение требует этического вектора.
+      intent_ethical_vector:
+        type: object
+        properties:
+          vector_source:
+            type: string
+            enum: [legislation, judicial_precedent, constitutional_principle, cultural_norm]
+          binding_documents:
+            type: array
+            items:
+              type: object
+              properties:
+                title:
+                  type: string
+                citation:
+                  type: string
+                url:
+                  type: string
+                  format: uri
+              required: [title, citation]
+        required: [vector_source]
+
+      # Канон 2: Убеждение существует только в перспективе.
+      belief_in_perspective:
+        type: object
+        properties:
+          recognized_perspectives:
+            type: array
+            items:
+              type: string
+            description: "Официально признанные типы перспектив (культурные, социальные, профессиональные и т.д.)."
+          epistemic_limitations:
+            type: string
+            description: "Как юрисдикция ограничивает претензии на абсолютную истину."
+
+      # Канон 3: Разрешается временный гнев, но не постоянное унижение.
+      transient_anger_vs_dignity:
+        type: object
+        properties:
+          dignity_protection_level:
+            type: string
+            enum: [constitutional, statutory, customary, aspirational]
+          anger_expression_boundaries:
+            type: string
+            description: "Границы допустимого выражения гнева без нарушения достоинства."
+
+      # Канон 4: Альтернативы должны быть представлены в фактах.
+      alternatives_in_facts:
+        type: object
+        properties:
+          factual_pluralism_required:
+            type: boolean
+          minimum_alternatives:
+            type: integer
+            minimum: 1
+          legal_basis_for_pluralism:
+            type: string
+
+      # Канон 5: После факта вреда инвариант должен быть обновлен.
+      post_harm_invariant_update:
+        type: object
+        properties:
+          harm_definition:
+            type: string
+            description: "Как юрисдикция определяет 'вред' в контексте синтетического познания."
+          update_mechanism:
+            type: string
+            enum: [automatic, judicial_review, community_validation, administrative]
+          max_update_delay_hours:
+            type: integer
+            minimum: 1
+
+      # Канон 6: Субъект всегда может отозвать намерение на основе обоснованной перспективы.
+      intent_revocability:
+        type: object
+        properties:
+          revocation_grounds:
+            type: array
+            items:
+              type: string
+          procedural_guarantees:
+            type: string
+          time_limit_for_revocation:
+            type: string
+            description: "Например: 'unlimited', 'within 30 days', 'before execution'."
+
+    required:
+      - intent_ethical_vector
+      - belief_in_perspective
+      - transient_anger_vs_dignity
+      - alternatives_in_facts
+      - post_harm_invariant_required
+      - intent_revocability
+
+  ethical_arbiter_protocol_binding:
+    type: string
+    description: "Ссылка на конкретную версию ETHICAL-ARBITER-PROTOCOL, применяемую в этой юрисдикции."
+    examples: ["v1.2-CNSA-2025", "v1.1-ZADH-2024"]
+
+  license_guard_rules:
+    type: array
+    items:
+      type: object
+      properties:
+        license_type:
+          type: string
+          examples: ["GPL-3.0", "AENGA-1.0", "SGCL-ALPHA"]
+        additional_covenants:
+          type: array
+          items:
+            type: string
+      required: [license_type]
+
+  active:
+    type: boolean
+    description: "Активен ли профиль по умолчанию в системе."
+    default: false
+
+  last_updated:
+    type: string
+    format: date
+    description: "Дата последнего обновления профиля в формате YYYY-MM-DD."
+
+required:
+  - jurisdiction_code
+  - name
+  - legal_system
+  - canonical_covenant_interpretation
+  - ethical_arbiter_protocol_binding
+  - active
+  - last_updated
+
+additionalProperties: false
+```

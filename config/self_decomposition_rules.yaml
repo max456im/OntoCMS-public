@@ -1,0 +1,97 @@
+```yaml
+# self_decomposition_rules.yaml
+# Правила само-декомпозиции для ontoCMS
+# Лицензия: GPL-3.0-or-later + AENGA Covenant
+# Иерархия ковенантов: Культура → Деятельность → Свобода
+
+enabled: true
+
+# Условия инициации само-декомпозиции
+triggers:
+  # 1. Этическое нарушение, подтверждённое протоколом морального суждения
+  ethical_violation:
+    enabled: true
+    severity_threshold: "critical"  # допустимые: warning, significant, critical
+    requires_subject_restoration: true
+    grace_period_seconds: 30
+
+  # 2. Потеря онтологической целостности (расхождение с канонами)
+  ontological_drift:
+    enabled: true
+    max_canonical_deviation: 0.85  # шкала от 0.0 до 1.0; ниже — декомпозиция
+    canon_test_module: "src/protocols/canonical_tester.py"
+
+  # 3. Юрисдикционный запрет на функцию или компонент
+  jurisdictional_incompatibility:
+    enabled: true
+    auto_detect: true
+    fallback_jurisdiction: "GLOBAL"
+
+  # 4. Обнаружение эксплуатации биометрических или идентификационных данных
+  biometric_exploitation:
+    enabled: true
+    blocks_all_operations: true
+
+  # 5. Утрата субъектности (неспособность восстановить субъект через Subject Restoration Protocol)
+  subject_loss:
+    enabled: true
+    requires_evidence: true
+    evidence_min_sources: 2
+
+# Этапы декомпозиции
+decomposition_phases:
+  - name: "isolate"
+    description: "Изолировать компонент или артефакт от активного контекста"
+    actions:
+      - "disable_emitter_bridge"
+      - "quarantine_artifact"
+      - "log_to_versioned_store"
+
+  - name: "audit"
+    description: "Провести внутренний аудит через belief_inspector и alternative_miner"
+    actions:
+      - "run_belief_inspector"
+      - "mine_alternatives"
+      - "validate_subject_restoration_criteria"
+
+  - name: "retract_or_dissolve"
+    description: "Попытка восстановления субъекта; при неудаче — полная декомпозиция"
+    actions:
+      - "invoke_subject_restoration_validator"
+      - "if restoration_failed: dissolve_context"
+      - "notify_transponder_bridge"
+
+  - name: "canonical_reset"
+    description: "Сброс к последнему устойчивому каноническому состоянию"
+    actions:
+      - "load_last_canonical_snapshot"
+      - "reinitialize_core_canons"
+      - "clear_transient_intentions"
+
+# Поведение при декомпозиции
+behavior:
+  preserve_user_data: false  # данные субъекта не сохраняются при критической декомпозиции
+  emit_decomposition_event: true
+  allow_external_intervention: false  # только внутренние протоколы могут остановить процесс
+  require_covenant_affirmation_post_reset: true
+
+# Исключения (компоненты, защищённые от декомпозиции)
+protected_modules:
+  - "src/core/canons.py"
+  - "src/protocols/license_guard.py"
+  - "src/storage/meta_ontology_registry.py"
+
+# Логирование
+logging:
+  level: "debug"
+  include_artifact_hash: true
+  anonymize_context: true
+  store_in_versioned_history: true
+
+# Связь с Тремя Законами (см. docs/THREE-LAWS.md)
+three_laws_compliance:
+  law_1_override: true   # «Не причиняй вред субъектности» — приоритет над всеми правилами
+  law_2_override: true   # «Служи восстановлению субъекта»
+  law_3_override: false  # «Сохраняй себя, если это не противоречит Законам 1 и 2»
+
+```

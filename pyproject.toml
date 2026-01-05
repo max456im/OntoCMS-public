@@ -1,0 +1,90 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ontocms"
+version = "0.14.4"
+description = "Ontological Content Management System for Synthetic Minds"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "OntoCoder Collective", email = "futurae.custos@ontocms.dev"}
+]
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Legal Industry",
+    "Intended Audience :: Science/Research",
+]
+dependencies = [
+    "PyYAML>=6.0",
+    "jsonschema>=4.18.0",
+    "pydantic>=2.5.0",
+    "python-dotenv>=1.0.0",
+    "license-expression>=30.3.1",
+    "cryptography>=41.0.0"
+]
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0"
+]
+dev = [
+    "black>=23.0",
+    "isort>=5.12",
+    "mypy>=1.5"
+]
+jurisdiction = [
+    "requests>=2.31.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/ontocms/onto144"
+Documentation = "https://github.com/ontocms/onto144/tree/main/docs"
+Source = "https://github.com/ontocms/onto144"
+"Ethical Manifesto" = "https://github.com/ontocms/onto144/blob/main/docs/AENGA-MANIFESTO.md"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ontocms*"]
+
+[tool.setuptools.package-data]
+ontocms = ["py.typed"]
+
+[tool.black]
+line-length = 99
+target-version = ['py310', 'py311', 'py312']
+
+[tool.isort]
+profile = "black"
+line_length = 99
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers --tb=short -v"
+markers = [
+    "canonical: tests enforcing the Six Canons",
+    "harm: tests detecting or preventing harm",
+    "jurisdiction: jurisdiction-specific behavior",
+    "compliance: license or covenant compliance"
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["src/ontocms/_version.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "@abstractmethod"
+]

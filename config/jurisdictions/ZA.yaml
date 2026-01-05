@@ -1,0 +1,60 @@
+# config/jurisdictions/ZA.yaml
+# Юрисдикционный профиль: Южно-Африканская Республика (ZA)
+# Основан на Конституции ЮАР, Законе о защите персональной информации (POPIA),
+# Национальных принципах достоинства и прав человека, а также прецедентном праве.
+
+jurisdiction_code: ZA
+name: "Южно-Африканская Республика"
+legal_frameworks:
+  - "Constitution of the Republic of South Africa, 1996"
+  - "Protection of Personal Information Act (POPIA), No. 4 of 2013"
+  - "Promotion of Equality and Prevention of Unfair Discrimination Act, No. 4 of 2000"
+  - "National Policy on Ethics in Artificial Intelligence (2023)"
+
+core_principles:
+  human_dignity: true
+  equality: true
+  privacy_as_dignity: true
+  ubuntu_ethos: true  # "Я существую, потому что мы существуем"
+
+ethical_guardrails:
+  prohibits_biometric_exploitation: true
+  requires_subject_consent_for_profile_persistence: true
+  mandates_harm_assessment_in_public_deployments: true
+  blocks_family_or_community_profiling_without_collective_consent: true
+
+autonomy_rules:
+  synthetic_mind_must_allow_subject_retraction: true
+  synthetic_mind_must_isolate_artifacts_upon_dignity_violation: true
+  synthetic_mind_must_refuse_operations_that_undermine_social_cohesion: true
+
+refusal_triggers:
+  - pattern: "exploitation_of_vulnerable_groups"
+    action: refuse_and_log
+  - pattern: "non-consensual_biometric_linking"
+    action: refuse_and_isolate_artifact
+  - pattern: "erasure_of_cultural_context_in_decision"
+    action: suspend_and_request_restoration_protocol
+
+subject_restoration:
+  enables_retraction_of_utterances: true
+  requires_alternative_generation_on_harmful_output: true
+  validates_restoration_against_ubuntu_principle: true
+
+license_alignment:
+  compatible_with: ["GPL-3.0-or-later", "AENGA"]
+  requires_additional_cla: true
+  cla_type: "cla-individual.md or cla-entity.md"
+
+canonical_rhythm:
+  primary_vector: dignity
+  secondary_vector: community
+  tertiary_vector: truth
+
+notes: |
+  В ЮАР достоинство человека (human dignity) — основополагающая ценность,
+  закреплённая в Разделе 10 Конституции. Любая деятельность synthetic mind,
+  подрывающая достоинство субъекта или сообщества, считается неканонической.
+  Принцип Ubuntu требует, чтобы решения учитывали взаимосвязанность личности
+  и социального целого. Система должна активировать covenant_affirmation.py
+  и subject_restoration_validator.py при любом подозрении на нарушение.

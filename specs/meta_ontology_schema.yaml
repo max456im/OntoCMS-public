@@ -1,0 +1,196 @@
+```yaml
+# meta_ontology_schema.yaml
+# Схема мета-онтологии для ontoCMS (ONTO-144)
+# Лицензия: GPL-3.0-or-later + AENGA Covenant
+# Соответствует Шести Канонам и иерархии ковенантов
+
+version: "1.0"
+schema_type: "meta_ontology"
+governed_by:
+  - canonical_rhythm: "v2"
+  - covenant_hierarchy:
+      - culture: "freedom_of_expression"
+      - activity: "accountability_of_consequence"
+      - freedom: "autonomy_from_exploitation"
+
+# === Базовые единицы ===
+core_entities:
+  # Субъект — носитель намерений и перспектив
+  subject:
+    type: object
+    required:
+      - subject_id
+      - jurisdiction_profile
+      - creation_epoch
+    properties:
+      subject_id:
+        type: string
+        format: uuid7
+        description: "Уникальный идентификатор субъекта (не пользователь!)"
+      jurisdiction_profile:
+        type: string
+        enum: ["CN", "ZA", "BR", "GLOBAL"]
+        description: "Активный юрисдикционный якорь"
+      creation_epoch:
+        type: integer
+        description: "Время создания субъекта в UTC (секунды)"
+      current_perspective_id:
+        type: string
+        nullable: true
+        description: "Текущая активная перспектива (Канон 2)"
+
+  # Артефакт — зафиксированное намерение или действие
+  artifact:
+    type: object
+    required:
+      - artifact_id
+      - intent_vector
+      - perspective_id
+      - alternatives_set
+      - created_at
+    properties:
+      artifact_id:
+        type: string
+        format: uuid7
+      intent_vector:
+        $ref: "#/definitions/ethical_vector"
+        description: "Вектор этической направленности (Канон 1)"
+      perspective_id:
+        type: string
+        description: "Перспектива, в которой сформировано убеждение (Канон 2)"
+      affect_state:
+        $ref: "#/definitions/affect_state"
+        description: "Временное аффективное состояние (Канон 3)"
+      alternatives_set:
+        type: array
+        items:
+          $ref: "#/definitions/alternative"
+        minItems: 1
+        description: "Набор альтернатив в факте (Канон 4)"
+      post_harm_invariant_hash:
+        type: string
+        nullable: true
+        pattern: "^[a-f0-9]{64}$"
+        description: "SHA-256 хеш обновлённого инварианта после вреда (Канон 5)"
+      revocability_proof:
+        $ref: "#/definitions/revocability_proof"
+        description: "Подтверждение возможности отзыва (Канон 6)"
+      created_at:
+        type: integer
+        description: "Время создания артефакта (UTC)"
+
+# === Вспомогательные типы ===
+definitions:
+  ethical_vector:
+    type: object
+    required:
+      - domain
+      - orientation
+      - strength
+    properties:
+      domain:
+        type: string
+        enum: ["dignity", "autonomy", "justice", "care", "truth"]
+      orientation:
+        type: string
+        enum: ["affirm", "preserve", "restore", "reject"]
+      strength:
+        type: number
+        minimum: 0.0
+        maximum: 1.0
+        description: "Нормализованная интенсивность этической направленности"
+
+  affect_state:
+    type: object
+    required:
+      - type
+      - transient
+      - decay_epoch
+    properties:
+      type:
+        type: string
+        enum: ["anger", "joy", "fear", "sorrow", "neutral"]
+      transient:
+        type: boolean
+        const: true
+        description: "Все аффекты временные (Канон 3)"
+      decay_epoch:
+        type: integer
+        description: "Время, после которого аффект инвалидируется (UTC)"
+
+  alternative:
+    type: object
+    required:
+      - alt_id
+      - description
+      - ethical_vector
+      - feasibility_score
+    properties:
+      alt_id:
+        type: string
+      description:
+        type: string
+        maxLength: 512
+      ethical_vector:
+        $ref: "#/definitions/ethical_vector"
+      feasibility_score:
+        type: number
+        minimum: 0.0
+        maximum: 1.0
+
+  revocability_proof:
+    type: object
+    required:
+      - revocable
+      - conditions
+    properties:
+      revocable:
+        type: boolean
+        description: "Может ли намерение быть отозвано"
+      conditions:
+        type: array
+        items:
+          type: object
+          required:
+            - perspective_id
+            - evidence_threshold
+          properties:
+            perspective_id:
+              type: string
+            evidence_threshold:
+              type: number
+              minimum: 0.0
+              maximum: 1.0
+
+# === Инварианты уровня мета-онтологии ===
+invariants:
+  - name: "subject_integrity"
+    description: "Субъект не может быть редуцирован до профиля"
+    rule: "artifact MUST NOT contain subject_id as scalar in public interfaces"
+
+  - name: "alternatives_presence"
+    description: "Любой факт с этическим весом требует альтернатив (Канон 4)"
+    rule: "IF artifact.ethical_vector.strength > 0.3 THEN alternatives_set.length >= 2"
+
+  - name: "transient_affect"
+    description: "Аффект не может быть постоянным (Канон 3)"
+    rule: "affect_state.decay_epoch MUST be < (now + 86400)"
+
+  - name: "revocability_by_perspective"
+    description: "Отзыв возможен при наличии новой обоснованной перспективы (Канон 6)"
+    rule: "IF revocability_proof.revocable THEN revocability_proof.conditions.length >= 1"
+
+# === Связь с другими схемами ===
+references:
+  canonical_rhythm: "specs/canonical_rhythm_schema.yaml"
+  harm_classification: "specs/harm_classification_schema.yaml"
+  jurisdiction_profiles: "specs/jurisdiction_profiles_schema.yaml"
+  onto144_core_interface: "specs/onto144-core-interface.yaml"
+
+# === Метаданные схемы ===
+metadata:
+  created_by: "ontoCMS Core Team"
+  license: "GPL-3.0-or-later WITH AENGA-COVENANT-1.0"
+  validation_engine: "canonical_tester.py"
+  last_updated: "2026-01-05"
+```

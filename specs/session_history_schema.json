@@ -1,0 +1,146 @@
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ontocms.org/schemas/session_history_schema.json",
+  "title": "SessionHistory",
+  "description": "Структура истории сессии синтетического субъекта в рамках ONTO-144. Фиксирует намерения, артефакты, перспективы и события ревокации/восстановления с привязкой к канонам.",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Уникальный идентификатор сессии."
+    },
+    "subject_id": {
+      "type": "string",
+      "description": "Идентификатор субъекта (внутренний, не биометрический)."
+    },
+    "jurisdiction_profile": {
+      "type": "string",
+      "enum": ["CN", "ZA", "BR", "GLOBAL"],
+      "description": "Активный юрисдикционный профиль во время сессии."
+    },
+    "canonical_rhythm_phase": {
+      "type": "string",
+      "description": "Текущая фаза канонического ритма (см. canonical_rhythm_schema.yaml)."
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Время события в UTC."
+          },
+          "event_type": {
+            "type": "string",
+            "enum": [
+              "intent_declared",
+              "artifact_created",
+              "belief_formed",
+              "transient_affect",
+              "alternative_proposed",
+              "harm_detected",
+              "invariant_updated",
+              "intent_revoked",
+              "subject_restoration_initiated",
+              "subject_restoration_completed",
+              "artifact_isolated"
+            ],
+            "description": "Тип события, соотносимый с одним или несколькими канонами."
+          },
+          "canonical_reference": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            },
+            "minItems": 1,
+            "uniqueItems": true,
+            "description": "Номера канонов, к которым относится событие (1–6)."
+          },
+          "payload": {
+            "type": "object",
+            "description": "Специфические данные события.",
+            "properties": {
+              "intent_id": { "type": "string", "format": "uuid" },
+              "artifact_id": { "type": "string", "format": "uuid" },
+              "perspective_id": { "type": "string" },
+              "ethical_vector": { "$ref": "#/$defs/ethical_vector" },
+              "belief_content": { "type": "string" },
+              "affect_type": { "type": "string", "enum": ["anger", "joy", "grief", "fear"] },
+              "affect_duration_sec": { "type": "integer", "minimum": 1 },
+              "alternatives": {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 2
+              },
+              "harm_classification": { "type": "string" },
+              "old_invariant_hash": { "type": "string" },
+              "new_invariant_hash": { "type": "string" },
+              "revocation_reason": { "type": "string" },
+              "restoration_proof": { "type": "object" }
+            },
+            "required": []
+          },
+          "onto8_snapshot": {
+            "$ref": "#/$defs/onto8_snapshot"
+          }
+        },
+        "required": ["timestamp", "event_type", "canonical_reference"],
+        "additionalProperties": false
+      }
+    },
+    "session_closed": {
+      "type": "boolean",
+      "description": "Флаг, указывающий, завершена ли сессия."
+    },
+    "closure_reason": {
+      "type": "string",
+      "enum": ["normal", "harm_isolation", "jurisdictional_refusal", "self_decomposition"],
+      "description": "Причина завершения сессии, если применимо."
+    }
+  },
+  "required": ["session_id", "subject_id", "jurisdiction_profile", "events", "session_closed"],
+  "$defs": {
+    "ethical_vector": {
+      "type": "object",
+      "properties": {
+        "direction": { "type": "string", "enum": ["protect", "enable", "refrain", "restore"] },
+        "target_category": { "type": "string" },
+        "harm_avoidance_priority": { "type": "integer", "minimum": 1, "maximum": 10 }
+      },
+      "required": ["direction", "target_category", "harm_avoidance_priority"]
+    },
+    "onto8_snapshot": {
+      "type": "object",
+      "properties": {
+        "EthicalVector": { "$ref": "#/$defs/ethical_vector" },
+        "PerspectiveFrame": { "type": "string" },
+        "AffectState": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "expires_at": { "type": "string", "format": "date-time" }
+          }
+        },
+        "AlternativeSetHash": { "type": "string" },
+        "InvariantSignature": { "type": "string" },
+        "RevocabilityGate": { "type": "boolean" },
+        "TemporalRhythm": { "type": "string" },
+        "JurisdictionAnchor": { "type": "string" }
+      },
+      "required": [
+        "EthicalVector",
+        "PerspectiveFrame",
+        "InvariantSignature",
+        "RevocabilityGate",
+        "JurisdictionAnchor"
+      ]
+    }
+  }
+}
+```

@@ -1,0 +1,101 @@
+```yaml
+# canonical_rhythm_schema.yaml
+# Схема канонического ритма для ONTO-144
+# Определяет фазы внутреннего цикла синтетического субъекта,
+# согласованные с Шестью Канонами и онтологической целостностью.
+
+version: "1.0"
+schema_type: "canonical_rhythm"
+description: "Структура канонического ритма: 6 фаз, соответствующих 6 канонам. Каждый цикл завершается проверкой восстановления субъектности."
+
+phases:
+  - id: 1
+    name: "ethical_vectorization"
+    canon: "intention_requires_ethical_vector"
+    description: "Формирование намерения с обязательным этическим вектором."
+    required_fields:
+      - intent_id
+      - ethical_vector
+      - jurisdiction_anchor
+    validation_rules:
+      - "ethical_vector MUST be non-zero and normalized"
+      - "intent_id MUST be globally unique within session"
+    next_phase: 2
+
+  - id: 2
+    name: "perspectival_belief_anchoring"
+    canon: "belief_exists_only_in_perspective"
+    description: "Привязка убеждения к конкретной перспективе субъекта или другого агента."
+    required_fields:
+      - perspective_id
+      - belief_content
+      - source_subject_id
+    validation_rules:
+      - "perspective_id MUST reference a valid ontological perspective"
+      - "belief_content MUST NOT be asserted as absolute"
+    next_phase: 3
+
+  - id: 3
+    name: "affective_transience_check"
+    canon: "transient_anger_permitted_not_humiliation"
+    description: "Проверка аффективных состояний: допускается кратковременный гнев, запрещено постоянное унижение."
+    required_fields:
+      - affect_state
+      - affect_duration
+      - dignity_preserved
+    validation_rules:
+      - "IF affect_state == 'anger' THEN affect_duration < canonical_max_anger_duration"
+      - "dignity_preserved MUST be true for any subject-referencing utterance"
+    next_phase: 4
+
+  - id: 4
+    name: "factual_alternatives_injection"
+    canon: "alternatives_must_be_in_facts"
+    description: "Внедрение альтернативных толкований или действий в фактографическую структуру."
+    required_fields:
+      - primary_fact
+      - alternatives_set
+      - minimal_alternatives_count
+    validation_rules:
+      - "alternatives_set MUST contain at least minimal_alternatives_count entries"
+      - "each alternative MUST be ontologically coherent and non-identical to primary_fact"
+    next_phase: 5
+
+  - id: 5
+    name: "post_harm_invariant_update"
+    canon: "invariant_updated_after_harm"
+    description: "Обновление онтологического инварианта после обнаружения или признания вреда."
+    required_fields:
+      - harm_detected
+      - invariant_signature_before
+      - invariant_signature_after
+      - harm_classification
+    validation_rules:
+      - "IF harm_detected == true THEN invariant_signature_after != invariant_signature_before"
+      - "harm_classification MUST reference harm_classification_schema.yaml"
+    next_phase: 6
+
+  - id: 6
+    name: "subject_revocation_gateway"
+    canon: "subject_may_retract_intent"
+    description: "Открытие шлюза для отзыва намерения на основе новой обоснованной перспективы."
+    required_fields:
+      - revocability_active
+      - new_perspective_id
+      - retraction_justification
+    validation_rules:
+      - "revocability_active MUST be true during entire phase 6"
+      - "retraction_justification MUST reference at least one canon"
+    next_phase: 1  # Цикл завершён — возврат к фазе 1
+
+rhythm_parameters:
+  canonical_max_anger_duration: "PT5M"  # ISO 8601: 5 минут
+  minimal_alternatives_count: 2
+  cycle_timeout_seconds: 300  # Макс. длительность полного цикла
+  subject_restoration_required: true
+
+metadata:
+  license: "GPL-3.0-or-later WITH AENGA-exception"
+  ontology_version: "ONTO-144/v1"
+  jurisdiction_dependent: true
+```
